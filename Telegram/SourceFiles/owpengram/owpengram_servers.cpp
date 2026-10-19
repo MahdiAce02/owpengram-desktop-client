@@ -47,18 +47,18 @@ const auto kServerLogosDir = u"owpengram_server_logos"_q;
 const auto kBuiltinIdentityFile = u"owpengram_builtin_identity.json"_q;
 constexpr auto kCheckTimeoutMs = 3000;
 constexpr auto kConnectTimeoutMs = 30000;
-const auto kOfficialDefaultHost = u"152.89.254.50"_q;
+const auto kOfficialDefaultHost = u"tel.lidunet.ir"_q;
 constexpr auto kOfficialDefaultPort = 2398;
 
 // Default RSA public key for the built-in self-hosted OwpenGram server.
 const auto kOfficialRsaPublicKey = u"\
 -----BEGIN RSA PUBLIC KEY-----\n\
-MIIBCgKCAQEAxUi0fsjiop7kTI+c+ATHwIs+XPcircj9WL/tNASH45/phiIvxhPU\n\
-z4T6OgUfDVpQEC8SWCuq77aZAhnpZ0rfQ+h6vEv7X970wIAPT/hbyzekyWEFmH5Q\n\
-RxSPrOMKF/V0wuTOVJcoHZW5r5cK7xsVe/otdYdOgt67kITS7pqoO1BlstRuOEHL\n\
-jhaJ/40dXocrWpDQlJP2TZFwk5JF1Pbx/2mLr/asQapc/qbQP82b+iDLW8QIBT0f\n\
-+xi4Js4k7Qo9kZSuUHUCDzmJt6Z0USBxxp/tSZRVjWRaT9ORDrdyfb/mKFSt9BtC\n\
-B5VRJ1e0q7P/9/w21T0p9uV3eNXhnPnLFQIDAQAB\n\
+MIIBCgKCAQEA61mXmEy8YB1vHp9tgDM7yA5uyzopahO5lQFc4A3fKgA/AU7n9yFH\n\
+jDjj6bXqjLaAFYveYysigRhYzSghdu8FPMcelharq/tU+CyVCHS9Gje7FF1gYunp\n\
+KqbL4taCkQndxx2cAVAzJiw+fkAVKFVjkiz2dwrs5n9K10YydxKF4sFqICe2KX5F\n\
+HfzeH56C1e0uF4FR7M/jWguBPSd5IJKcxrTXCRVtHv6vMpnkolIJS71yuXbjq85j\n\
+pKmMxVSkpttK6pmB8RI5gV2jkvmEp2o61Y9i7SLHY5EaLTtuTWfFz0T8GloVkfG6\n\
+mrL6kG/9h0C5FxlWPlvfhH2JaLa3cBKFiQIDAQAB\n\
 -----END RSA PUBLIC KEY-----"_q;
 
 [[nodiscard]] QString ServersFilePath() {
@@ -574,8 +574,8 @@ Server TelegramServer() {
 Server OfficialServer() {
 	auto result = Server();
 	result.id = QString::fromLatin1(kOfficialServerId);
-	result.name = tr::lng_owpengram_server_official_name(tr::now);
-	result.description = tr::lng_owpengram_server_official_description(tr::now);
+	result.name = u"LiduGram"_q;
+	result.description = u"LiduGram Official Server (tel.lidunet.ir)"_q;
 	result.logoPath = DefaultLogoPath();
 	// Whatever the operator has since set on the server itself wins over the
 	// shipped defaults -- see RefreshServersInfo(). Only these three fields:
@@ -607,8 +607,8 @@ QString FormatEndpoint(const Server &server) {
 
 std::vector<Server> ListServers() {
 	auto result = std::vector<Server>();
-	result.push_back(TelegramServer());
 	result.push_back(OfficialServer());
+	result.push_back(TelegramServer());
 	for (const auto &custom : ReadCustomServers()) {
 		result.push_back(custom);
 	}
