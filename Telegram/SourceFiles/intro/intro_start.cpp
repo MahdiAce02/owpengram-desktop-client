@@ -1,3 +1,5 @@
+#include "owpengram/owpengram_servers.h"
+#include "intro/intro_qr.h"
 /*
 This file is part of Telegram Desktop,
 the official desktop application for the Telegram messaging service.
@@ -35,7 +37,9 @@ StartWidget::StartWidget(
 
 void StartWidget::submit() {
 	account().destroyStaleAuthorizationKeys();
-	goNext<ServerSelectWidget>();
+	const auto server = Owpengram::OfficialServer();
+	Owpengram::ApplyServerToAccount(&account(), server);
+	goNext<QrWidget>();
 }
 
 rpl::producer<QString> StartWidget::nextButtonText() const {
