@@ -1194,6 +1194,7 @@ winarm:
     SET "ARCH_PARAM=--arch=aarch64"
 win:
 depends:patches/build_ffmpeg_win.sh
+    bash -c "sed -i 's/\$FullExecPath/\$FullScriptPath/g' ../patches/build_ffmpeg_win.sh && sed -i 's|export PKG_CONFIG_PATH=.*|export PKG_CONFIG_PATH=\"\$(cd \$FullScriptPath/../local/lib/pkgconfig && pwd)\"|' ../patches/build_ffmpeg_win.sh && head -n 25 ../patches/build_ffmpeg_win.sh"
     bash -c "export MSYS2_ARG_CONV_EXCL='*' && bash ../patches/build_ffmpeg_win.sh || (echo ===== FFMPEG CONFIG LOG ===== && tail -n 120 ffbuild/config.log && exit 1)"
 mac:
     export PKG_CONFIG_PATH=$USED_PREFIX/lib/pkgconfig
