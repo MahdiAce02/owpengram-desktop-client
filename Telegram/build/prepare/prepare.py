@@ -431,6 +431,17 @@ def runStages():
         clearCacheKey(stage)
         print('BUILDING:')
         os.chdir(stage['directory'])
+        if stage['name'] == 'ffmpeg' and win:
+            patch_sh = os.path.join(libsDir, 'patches', 'build_ffmpeg_win.sh')
+            if os.path.exists(patch_sh):
+                with open(patch_sh, 'r', encoding='utf-8') as f:
+                    sc = f.read()
+                sc = sc.replace('$FullExecPath', '$FullScriptPath')
+                sc = sc.replace('export PKG_CONFIG_PATH="$FullScriptPath/../local/lib/pkgconfig:$PKG_CONFIG_PATH"',
+                                'LOCAL_DIR=$(cd "$FullScriptPath/../local/lib/pkgconfig" && pwd)\nexport PKG_CONFIG_PATH="$LOCAL_DIR"\necho "Resolved PKG_CONFIG_PATH: $PKG_CONFIG_PATH"')
+                with open(patch_sh, 'w', encoding='utf-8') as f:
+                    f.write(sc)
+                print('[HOOK] Successfully patched build_ffmpeg_win.sh with POSIX PKG_CONFIG_PATH')
         if not run(commands):
             print(prefix + ': FAILED')
             finish(1)
@@ -1194,7 +1205,6 @@ winarm:
     SET "ARCH_PARAM=--arch=aarch64"
 win:
 depends:patches/build_ffmpeg_win.sh
-    bash -c "sed -i 's/\$FullExecPath/\$FullScriptPath/g' ../patches/build_ffmpeg_win.sh && sed -i 's|export PKG_CONFIG_PATH=.*|export PKG_CONFIG_PATH=\"\$(cd \$FullScriptPath/../local/lib/pkgconfig && pwd)\"|' ../patches/build_ffmpeg_win.sh && head -n 25 ../patches/build_ffmpeg_win.sh"
     bash -c "export MSYS2_ARG_CONV_EXCL='*' && bash ../patches/build_ffmpeg_win.sh || (echo ===== FFMPEG CONFIG LOG ===== && tail -n 120 ffbuild/config.log && exit 1)"
 mac:
     export PKG_CONFIG_PATH=$USED_PREFIX/lib/pkgconfig
