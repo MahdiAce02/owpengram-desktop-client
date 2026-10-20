@@ -1194,7 +1194,7 @@ winarm:
     SET "ARCH_PARAM=--arch=aarch64"
 win:
 depends:patches/build_ffmpeg_win.sh
-    bash ../patches/build_ffmpeg_win.sh
+    bash -c "export MSYS2_ARG_CONV_EXCL='*' && bash ../patches/build_ffmpeg_win.sh || (echo ===== FFMPEG CONFIG LOG ===== && tail -n 120 ffbuild/config.log && exit 1)"
 mac:
     export PKG_CONFIG_PATH=$USED_PREFIX/lib/pkgconfig
 
